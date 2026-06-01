@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Oswald:wght@200..700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-neon: #CCFF00;
+  --color-neon-dim: #99cc00;
+  --color-dark: #0A0A0A;
+  --color-dark-surface: #111111;
+  --color-grid: #1F2937;
+  --color-grid-bright: #374151;
+
+  --font-oswald: "Oswald", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+/* =============================================
+   BASE STYLES
+   ============================================= */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-dark);
+    color: #ffffff;
+    font-family: var(--font-inter);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-neon);
+    color: var(--color-dark);
+  }
+}
+
+/* =============================================
+   GLITCH TEXT EFFECT
+   ============================================= */
+@keyframes glitch-1 {
+  0%, 100% { clip-path: inset(0 0 95% 0); transform: translate(0); }
+  10% { clip-path: inset(25% 0 55% 0); transform: translate(-5px, 2px); }
+  20% { clip-path: inset(70% 0 5% 0); transform: translate(5px, -2px); }
+  30% { clip-path: inset(10% 0 80% 0); transform: translate(-3px, 1px); }
+  40% { clip-path: inset(50% 0 30% 0); transform: translate(3px, -1px); }
+  50% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 3px); }
+  60% { clip-path: inset(5% 0 85% 0); transform: translate(4px, -2px); }
+  70% { clip-path: inset(60% 0 20% 0); transform: translate(-4px, 2px); }
+  80% { clip-path: inset(20% 0 60% 0); transform: translate(2px, -3px); }
+  90% { clip-path: inset(40% 0 40% 0); transform: translate(-1px, 1px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { clip-path: inset(95% 0 0 0); transform: translate(0); }
+  10% { clip-path: inset(55% 0 25% 0); transform: translate(5px, -2px); }
+  20% { clip-path: inset(5% 0 70% 0); transform: translate(-5px, 2px); }
+  30% { clip-path: inset(80% 0 10% 0); transform: translate(3px, -1px); }
+  40% { clip-path: inset(30% 0 50% 0); transform: translate(-3px, 1px); }
+  50% { clip-path: inset(5% 0 80% 0); transform: translate(2px, -3px); }
+  60% { clip-path: inset(85% 0 5% 0); transform: translate(-4px, 2px); }
+  70% { clip-path: inset(20% 0 60% 0); transform: translate(4px, -2px); }
+  80% { clip-path: inset(60% 0 20% 0); transform: translate(-2px, 3px); }
+  90% { clip-path: inset(40% 0 40% 0); transform: translate(1px, -1px); }
+}
+
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  color: #ff0040;
+  animation: glitch-1 3s infinite linear;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  color: #00e5ff;
+  animation: glitch-2 3s infinite linear;
+  z-index: -1;
+}
+
+/* =============================================
+   FLOATING GEOMETRIC ELEMENTS
+   ============================================= */
+@keyframes float-up {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.15; }
+  90% { opacity: 0.15; }
+  100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes float-diagonal {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  15% { opacity: 0.12; }
+  85% { opacity: 0.12; }
+  100% { transform: translate(-200px, -100vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulse-neon {
+  0%, 100% { box-shadow: 0 0 5px #CCFF0044, 0 0 15px #CCFF0022; }
+  50% { box-shadow: 0 0 15px #CCFF0088, 0 0 40px #CCFF0044; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* =============================================
+   3D PERSPECTIVE GRID BACKGROUND
+   ============================================= */
+.cyber-grid-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.cyber-grid-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image:
+    linear-gradient(rgba(204, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(204, 255, 0, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: center top;
+  animation: grid-scroll 20s linear infinite;
+}
+
+.cyber-grid-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to top, #0A0A0A 0%, transparent 100%);
+}
+
+@keyframes grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 60px; }
+}
+
+/* =============================================
+   SCANLINE OVERLAY
+   ============================================= */
+.scanline-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.03) 0px,
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* =============================================
+   NEON GLOW UTILITIES
+   ============================================= */
+.neon-glow {
+  box-shadow: 0 0 10px #CCFF0044, 0 0 30px #CCFF0022, 0 0 60px #CCFF0011;
+}
+
+.neon-glow-strong {
+  box-shadow: 0 0 15px #CCFF0066, 0 0 40px #CCFF0044, 0 0 80px #CCFF0022;
+}
+
+.neon-text-glow {
+  text-shadow: 0 0 10px #CCFF0066, 0 0 30px #CCFF0033, 0 0 60px #CCFF0011;
+}
+
+/* =============================================
+   3D TILT CARD
+   ============================================= */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.tilt-card-inner {
+  transform: translateZ(20px);
+}
+
+/* =============================================
+   PULSING CTA BUTTON
+   ============================================= */
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 0 15px #CCFF0044, 0 0 30px #CCFF0022; }
+  50% { box-shadow: 0 0 30px #CCFF0088, 0 0 60px #CCFF0044, 0 0 100px #CCFF0022; }
+}
+
+.cta-pulse {
+  animation: cta-pulse 2s ease-in-out infinite;
+}
+
+/* =============================================
+   MOBILE OPTIMIZATIONS
+   ============================================= */
+@media (max-width: 768px) {
+  .cyber-grid-bg::before {
+    background-size: 40px 40px;
+    opacity: 0.5;
+  }
+
+  .glitch-text::before,
+  .glitch-text::after {
+    display: none;
+  }
+
+  .floating-element {
+    display: none;
+  }
+}
+
+/* =============================================
+   SCROLLBAR STYLING
+   ============================================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1F2937;
+  border: 1px solid #CCFF0033;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #CCFF00;
+}
