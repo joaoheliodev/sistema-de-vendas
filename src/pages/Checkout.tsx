@@ -157,9 +157,6 @@ export const Checkout: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* ============================================= */}
-        {/* TERMINAL SECTION */}
-        {/* ============================================= */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -201,9 +198,6 @@ export const Checkout: React.FC = () => {
           </div>
         </motion.section>
 
-        {/* ============================================= */}
-        {/* BOTTOM SECTION: GUARANTEE + CHECKOUT */}
-        {/* ============================================= */}
         <div className="grid md:grid-cols-5 gap-6 md:gap-8">
           {/* Left Column: Guarantee + Features */}
           <div className="md:col-span-2 space-y-6">
@@ -310,7 +304,7 @@ export const Checkout: React.FC = () => {
 
             {/* CTA Button */}
             <a 
-              href="https://pay.kiwify.com.br/cA72yPu"
+              href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
               className="
                 block w-full text-center border-2 border-neon bg-neon text-dark
                 font-oswald uppercase italic px-8 py-5 text-xl md:text-2xl font-black

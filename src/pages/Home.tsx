@@ -69,9 +69,6 @@ export const Home: React.FC = () => {
     <Layout>
       <FloatingElements />
 
-      {/* ============================================= */}
-      {/* HERO SECTION */}
-      {/* ============================================= */}
       <section className="relative w-full overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-36 flex flex-col md:flex-row items-center gap-8 md:gap-16">
           {/* Left - Copy */}
@@ -173,9 +170,6 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* ============================================= */}
-      {/* STATS BAR */}
-      {/* ============================================= */}
       <motion.section 
         {...fadeUp}
         className="border-y border-grid/40 bg-dark-surface/50 backdrop-blur-sm"
@@ -190,19 +184,10 @@ export const Home: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* ============================================= */}
-      {/* MARQUEE */}
-      {/* ============================================= */}
       <Marquee />
 
-      {/* ============================================= */}
-      {/* INTERACTIVE HERO — BLACK HAT vs WHITE HAT */}
-      {/* ============================================= */}
       <InteractiveHero />
 
-      {/* ============================================= */}
-      {/* PILLAR CARDS SECTION */}
-      {/* ============================================= */}
       <section className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-32">
         <motion.div {...fadeUp} className="mb-16">
           <div className="flex items-center gap-4 mb-4">
@@ -233,9 +218,6 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* ============================================= */}
-      {/* URGENCY STRIP */}
-      {/* ============================================= */}
       <motion.section 
         {...fadeUp}
         className="bg-neon/5 border-y border-neon/20 py-6 px-4"
@@ -249,9 +231,6 @@ export const Home: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* ============================================= */}
-      {/* FINAL CTA - CONVERSION SECTION */}
-      {/* ============================================= */}
       <section className="py-20 md:py-32 px-4 md:px-8">
         <motion.div
           {...fadeUp}
