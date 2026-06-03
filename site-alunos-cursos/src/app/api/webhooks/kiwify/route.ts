@@ -92,18 +92,21 @@ export async function POST(req: Request) {
         }
       });
 
-      // Lógica de primeiro acesso (Enviar e-mail para setup de senha)
+      // Lógica de primeiro acesso (Gerar senha temporária e enviar e-mail)
       if (isFirstAccess || !user.password) {
-        const token = uuidv4();
-        await prisma.verificationToken.create({
-          data: {
-            email: user.email,
-            token,
-            expires: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
+        const tempPassword = crypto.randomBytes(4).toString('hex'); // 8 char random password
+        const bcrypt = require('bcrypt');
+        const hashedPassword = await bcrypt.hash(tempPassword, 10);
+        
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { 
+            password: hashedPassword,
+            mustChangePassword: true
           }
         });
 
-        await sendFirstAccessEmail(user.email, token);
+        await sendFirstAccessEmail(user.email, tempPassword);
       }
 
       return NextResponse.json({ message: 'Access granted' }, { status: 200 });

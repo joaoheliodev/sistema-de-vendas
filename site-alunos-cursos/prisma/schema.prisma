@@ -30,6 +30,7 @@ model User {
   name         String?
   email        String    @unique
   password     String?
+  mustChangePassword Boolean   @default(true)
   role         Role      @default(STUDENT)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
