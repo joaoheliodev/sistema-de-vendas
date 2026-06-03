@@ -30,3 +30,20 @@ dist-ssr/
 *.sw?
 
 .vercel
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Generated Prisma Client
+generated/
+
+# Agent/AI files
+.agents/
+AGENTS.md
+CLAUDE.md
+skills-lock.json
+
+# Docker
+docker-compose.yml
