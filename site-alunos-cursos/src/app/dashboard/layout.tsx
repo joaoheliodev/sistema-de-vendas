@@ -2,9 +2,15 @@ import { ReactNode } from 'react';
 import { StudentSidebar } from '@/components/StudentSidebar';
 import { SecurityWrapper } from '@/components/SecurityWrapper';
 import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const session = await auth();
+  
+  if (session?.user?.mustChangePassword) {
+    redirect('/force-reset');
+  }
+
   const email = session?.user?.email || 'aluno@cyberseg.com';
 
   return (
