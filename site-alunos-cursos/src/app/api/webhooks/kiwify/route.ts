@@ -113,7 +113,7 @@ export async function POST(req: Request) {
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://site-alunos-cursos.vercel.app';
       const normalizedAppUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl;
-      const setupLink = `${normalizedAppUrl}/setup-password?token=${token}`;
+      const setupLink = `${normalizedAppUrl}/setup-password/${token}`;
 
       if (!supabaseUrl) {
         return NextResponse.json({ error: 'Supabase URL missing' }, { status: 500 });

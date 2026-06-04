@@ -76,7 +76,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 export async function sendSetupPasswordEmail(email: string, token: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://site-alunos-cursos.vercel.app';
   const normalizedAppUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl;
-  const setupLink = `${normalizedAppUrl}/setup-password?token=${token}`;
+  const setupLink = `${normalizedAppUrl}/setup-password/${token}`;
 
   const { data, error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',

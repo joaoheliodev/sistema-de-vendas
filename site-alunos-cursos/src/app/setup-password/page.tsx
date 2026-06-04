@@ -5,9 +5,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { setupPassword } from "./actions";
 import { Suspense } from "react";
 
-function SetupPasswordForm() {
+interface SetupPasswordFormProps {
+  tokenProp?: string;
+}
+
+export function SetupPasswordForm({ tokenProp }: SetupPasswordFormProps) {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const token = tokenProp || searchParams.get("token");
   const router = useRouter();
 
   const [password, setPassword] = useState("");
