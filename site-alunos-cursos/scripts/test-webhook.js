@@ -12,7 +12,7 @@ async function runTest() {
     order_status: "approved",
     Customer: {
       full_name: "João Hélio",
-      email: "joaohelio396@gmail.com"
+      email: "joaohelio3966@gmail.com"
     }
   };
 

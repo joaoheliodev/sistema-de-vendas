@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendFirstAccessEmail(email: string, tempPassword: string) {
   const loginLink = `${process.env.NEXTAUTH_URL || 'https://site-alunos-cursos.vercel.app'}/login`;
 
-  await resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL || 'Equipe CyberSeg <suporte@cyberseg.com>',
     to: email,
     subject: 'Boas-vindas ao CyberSeg! 🚀 Seu acesso está liberado',
@@ -35,19 +35,24 @@ export async function sendFirstAccessEmail(email: string, tempPassword: string) 
         </div>
  
         <p style="margin-top: 40px; font-size: 12px; color: #6B7280; text-align: center; border-top: 1px solid #1A1A1A; padding-top: 20px;">
-          Se o botão não funcionar, copie e cole o link abaixo no seu navegador:<br/>
+          Se o botão não funcionar, copie e cole the link abaixo no seu navegador:<br/>
           <a href="${loginLink}" style="color: #CCFF00; text-decoration: underline;">${loginLink}</a><br/><br/>
           Em caso de dúvidas, responda a este e-mail.
         </p>
       </div>
     `
   });
+
+  if (error) {
+    console.error('Resend sendFirstAccessEmail Error:', error);
+    throw new Error(`Failed to send email: ${error.message}`);
+  }
 }
 
 export async function sendPasswordResetEmail(email: string, token: string) {
   const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
 
-  await resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL || 'Suporte CyberSeg <suporte@cyberseg.com>',
     to: email,
     subject: 'Redefinição de Senha - Portal CyberSeg',
@@ -61,4 +66,9 @@ export async function sendPasswordResetEmail(email: string, token: string) {
       </div>
     `
   });
+
+  if (error) {
+    console.error('Resend sendPasswordResetEmail Error:', error);
+    throw new Error(`Failed to send email: ${error.message}`);
+  }
 }
