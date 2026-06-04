@@ -1,4 +1,8 @@
-const fetch = require('node-fetch'); // Em Node 18+ o fetch é nativo, mas usamos isso por compatibilidade no script isolado.
+require('dotenv').config({ path: '.env.local' });
+require('dotenv').config();
+
+const crypto = require('crypto');
+const actualFetch = typeof fetch !== 'undefined' ? fetch : require('node-fetch');
 
 async function runTest() {
   console.log("🚀 Iniciando Simulação do Webhook Kiwify...\n");
@@ -7,19 +11,33 @@ async function runTest() {
     order_id: `test_${Date.now()}`,
     order_status: "approved",
     Customer: {
-      full_name: "João Teste",
-      email: "joao@teste.com"
+      full_name: "João Hélio",
+      email: "joaohelio396@gmail.com"
     }
   };
 
+  const bodyString = JSON.stringify(payload);
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+
+  const secret = process.env.KIWIFY_WEBHOOK_SECRET || '';
+  if (secret) {
+    console.log("🔒 Assinatura HMAC ativada (KIWIFY_WEBHOOK_SECRET detectado).");
+    const signature = crypto
+      .createHmac('sha1', secret)
+      .update(bodyString)
+      .digest('hex');
+    headers['x-kiwify-signature'] = signature;
+  } else {
+    console.log("⚠️ Sem assinatura (KIWIFY_WEBHOOK_SECRET não está definido).");
+  }
+
   try {
-    const response = await fetch('http://localhost:3000/api/webhooks/kiwify', {
+    const response = await actualFetch('https://site-alunos-cursos.vercel.app/api/webhooks/kiwify', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // Sem a signature aqui pois nosso código ignora validação se KIWIFY_WEBHOOK_SECRET estiver vazio no .env
-      },
-      body: JSON.stringify(payload)
+      headers,
+      body: bodyString
     });
 
     const data = await response.json();
@@ -29,7 +47,6 @@ async function runTest() {
 
     if (response.status === 200) {
       console.log("\n✅ Webhook executado com sucesso!");
-      console.log("👉 Acesse http://localhost:3000/admin/debug para verificar se o Usuário, o Token e o CourseAccess foram criados no banco.");
     } else {
       console.log("\n❌ Erro na simulação.");
     }
