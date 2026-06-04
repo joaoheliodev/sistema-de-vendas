@@ -111,6 +111,10 @@ export async function POST(req: Request) {
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://site-alunos-cursos.vercel.app';
+      const normalizedAppUrl = appUrl.endsWith('/') ? appUrl.slice(0, -1) : appUrl;
+      const setupLink = `${normalizedAppUrl}/setup-password?token=${token}`;
+
       if (!supabaseUrl) {
         return NextResponse.json({ error: 'Supabase URL missing' }, { status: 500 });
       }
@@ -124,7 +128,7 @@ export async function POST(req: Request) {
       } else {
         const supabase = createClient(supabaseUrl, supabaseServiceKey);
         inviteResult = await supabase.auth.admin.inviteUserByEmail(email, {
-          redirectTo: 'https://site-alunos-cursos.vercel.app/login',
+          redirectTo: setupLink,
           data: { full_name: name }
         });
       }
@@ -133,10 +137,21 @@ export async function POST(req: Request) {
 
       if (error) {
         if (error.message.includes('already registered') || error.message.includes('already exists')) {
-          return NextResponse.json({ message: 'Access granted (User already registered)' }, { status: 200 });
+          return NextResponse.json({
+            message: 'Access granted (User already registered)',
+            invited: false,
+            email: email,
+            setupLink: setupLink
+          }, { status: 200 });
         }
         console.error('Supabase Invite Error:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        return NextResponse.json({
+          message: 'Access granted (Supabase invite limit or error)',
+          invited: false,
+          inviteError: error.message,
+          email: email,
+          setupLink: setupLink
+        }, { status: 200 });
       }
 
       // Retorna 200 OK caso o convite seja processado/aceito com sucesso
@@ -144,7 +159,7 @@ export async function POST(req: Request) {
         message: 'Access granted',
         invited: true,
         email: email,
-        setupLink: `https://site-alunos-cursos.vercel.app/setup-password?token=${token}`
+        setupLink: setupLink
       }, { status: 200 });
     }
 

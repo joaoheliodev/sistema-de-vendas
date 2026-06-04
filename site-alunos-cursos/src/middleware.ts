@@ -6,6 +6,15 @@ export default withAuth(
     const token = req.nextauth.token;
     const url = req.nextUrl.pathname;
 
+    // Se o usuário não está autenticado
+    if (!token) {
+      // Permite acesso ao setup-password apenas se tiver o token na query string
+      if (url.startsWith("/setup-password") && req.nextUrl.searchParams.has("token")) {
+        return NextResponse.next();
+      }
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+
     const isAdmin = token?.role === "ADMIN";
     const needsPasswordReset = token?.mustChangePassword;
 
@@ -39,7 +48,14 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      authorized: ({ token, req }) => {
+        const url = req.nextUrl.pathname;
+        // Permite prosseguir sem token se for setup-password com token na query string
+        if (url.startsWith("/setup-password") && req.nextUrl.searchParams.has("token")) {
+          return true;
+        }
+        return !!token;
+      },
     },
   }
 );
