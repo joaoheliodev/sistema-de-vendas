@@ -1,5 +1,9 @@
 # CyberSeg — Plataforma de Conversão Segura
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite)](https://vitejs.dev/)
+
 Uma landing page brutalista (Neon/Dark Mode) desenvolvida como portfólio de cibersegurança e sistema de vendas de alta conversão. O projeto combina design premium, efeitos 3D responsivos e uma infraestrutura robusta de hardening (HTTP Headers e TLS strict).
 
 ---
