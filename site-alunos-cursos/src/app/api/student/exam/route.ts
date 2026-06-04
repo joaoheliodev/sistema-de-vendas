@@ -21,6 +21,34 @@ export async function POST(req: Request) {
 
     if (!exam) return NextResponse.json({ error: 'Exam not found' }, { status: 404 });
 
+    // Verify Course Access (IDOR/Bypass prevention)
+    const access = await prisma.courseAccess.findFirst({
+      where: { userId: session.user.id, status: 'ACTIVE' }
+    });
+
+    if (!access) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Verify course progress (100% completion)
+    const courseData = await prisma.course.findUnique({
+      where: { id: access.courseId },
+      include: {
+        modules: { include: { lessons: true } }
+      }
+    });
+
+    let totalLessons = 0;
+    courseData?.modules.forEach(m => { totalLessons += m.lessons.length });
+
+    const completed = await prisma.progress.count({
+      where: { userId: session.user.id, completed: true }
+    });
+
+    if (totalLessons > 0 && completed < totalLessons) {
+      return NextResponse.json({ error: 'Forbidden: You must complete 100% of the lessons.' }, { status: 403 });
+    }
+
     let score = 0;
     const wrongAnswers = [];
 

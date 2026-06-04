@@ -47,3 +47,7 @@ skills-lock.json
 
 # Docker
 docker-compose.yml
+
+# Keys & Certificates
+*.pem
+

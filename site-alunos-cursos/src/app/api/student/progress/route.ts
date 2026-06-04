@@ -17,13 +17,32 @@ export async function POST(req: Request) {
     // Calculate total duration
     const lesson = await prisma.lesson.findUnique({
       where: { id: lessonId },
-      include: { videos: true }
+      include: { 
+        videos: true,
+        module: {
+          select: { courseId: true }
+        }
+      }
     });
     
-    let totalDuration = 0;
-    if (lesson) {
-      totalDuration = lesson.videos.reduce((acc, curr) => acc + curr.duration, 0);
+    if (!lesson) {
+      return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
     }
+
+    // Verify if user has active access to the course of this lesson (IDOR prevention)
+    const access = await prisma.courseAccess.findFirst({
+      where: {
+        userId: session.user.id,
+        courseId: lesson.module.courseId,
+        status: 'ACTIVE'
+      }
+    });
+
+    if (!access) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    
+    const totalDuration = lesson.videos.reduce((acc, curr) => acc + curr.duration, 0);
 
     const progress = await prisma.progress.upsert({
       where: {

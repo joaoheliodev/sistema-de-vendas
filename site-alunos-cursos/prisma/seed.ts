@@ -6,7 +6,7 @@ async function main() {
   console.log('Start seeding...');
 
   // 1. Criar Usuário Admin
-  const adminPassword = await bcrypt.hash('Admin@123', 10);
+  const adminPassword = await bcrypt.hash(process.env.ADMIN_DEFAULT_PASSWORD || 'Admin@123', 10);
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@cyberseg.com' },
     update: {},

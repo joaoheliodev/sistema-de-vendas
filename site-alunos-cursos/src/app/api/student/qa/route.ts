@@ -21,11 +21,29 @@ export async function POST(req: Request) {
 
     // Get lesson context
     const lesson = await prisma.lesson.findUnique({
-      where: { id: lessonId }
+      where: { id: lessonId },
+      include: {
+        module: {
+          select: { courseId: true }
+        }
+      }
     });
 
     if (!lesson) {
       return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
+    }
+
+    // Verify if user has active access to the course of this lesson (IDOR prevention)
+    const access = await prisma.courseAccess.findFirst({
+      where: {
+        userId: (session.user as any).id,
+        courseId: lesson.module.courseId,
+        status: 'ACTIVE'
+      }
+    });
+
+    if (!access) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const prompt = `Você é um tutor especialista em Cibersegurança na plataforma "CyberSeg", respondendo à dúvida de um aluno.

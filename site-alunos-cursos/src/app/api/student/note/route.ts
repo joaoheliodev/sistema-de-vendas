@@ -14,6 +14,33 @@ export async function POST(req: Request) {
   }
 
   try {
+    // Verify if lesson exists and get its course ID
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      include: {
+        module: {
+          select: { courseId: true }
+        }
+      }
+    });
+
+    if (!lesson) {
+      return NextResponse.json({ error: 'Lesson not found' }, { status: 404 });
+    }
+
+    // Verify if user has active access to the course of this lesson (IDOR prevention)
+    const access = await prisma.courseAccess.findFirst({
+      where: {
+        userId: session.user.id,
+        courseId: lesson.module.courseId,
+        status: 'ACTIVE'
+      }
+    });
+
+    if (!access) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const note = await prisma.lessonNote.upsert({
       where: {
         userId_lessonId: {
