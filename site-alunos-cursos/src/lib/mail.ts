@@ -28,8 +28,8 @@ export async function sendFirstAccessEmail(email: string, tempPassword: string) 
           ⚠️ <strong>ATENÇÃO:</strong> Esta senha é temporária e serve apenas para o seu primeiro acesso. Por questões de segurança, o sistema exigirá que você cadastre uma nova senha definitiva logo após o login.
         </p>
 
-        <div style="text-align: center; margin: 32px 0;">
-          <a href="${loginLink}" style="display: inline-block; background-color: #CCFF00; color: #000000; padding: 16px 32px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px;">
+        <div style="text-align: center; margin: 40px 0;">
+          <a href="${loginLink}" style="display: inline-block; background-color: #00ff66; color: #000000; font-family: 'Courier New', Courier, monospace; padding: 16px 32px; text-decoration: none; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; border: 4px solid #000000; box-shadow: 6px 6px 0px 0px #000000;">
             Acesse a plataforma aqui
           </a>
         </div>

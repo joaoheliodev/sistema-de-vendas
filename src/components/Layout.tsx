@@ -65,6 +65,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             ))}
             <a 
               href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
               className="ml-4 border border-neon text-neon font-oswald uppercase italic text-xs tracking-wider px-4 py-2 hover:bg-neon hover:text-dark transition-all duration-300"
             >
               R$ 67,50 → ACESSAR
@@ -132,6 +134,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               >
                 <a
                   href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setIsMenuOpen(false)}
                   className="border-2 border-neon bg-neon text-dark font-oswald uppercase italic text-xl px-10 py-4 font-bold tracking-wider"
                 >

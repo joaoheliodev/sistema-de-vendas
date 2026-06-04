@@ -305,6 +305,8 @@ export const Checkout: React.FC = () => {
             {/* CTA Button */}
             <a 
               href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
               className="
                 block w-full text-center border-2 border-neon bg-neon text-dark
                 font-oswald uppercase italic px-8 py-5 text-xl md:text-2xl font-black

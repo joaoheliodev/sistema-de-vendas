@@ -5,6 +5,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   variant?: 'primary' | 'outline';
   pulse?: boolean;
+  href?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -12,6 +13,7 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth,
   variant = 'outline',
   pulse,
+  href,
   className = '',
   ...props
 }) => {
@@ -32,20 +34,42 @@ export const Button: React.FC<ButtonProps> = ({
     `,
   };
 
-  return (
-    <button
-      className={`
-        ${base} ${variants[variant]}
-        ${fullWidth ? 'w-full' : ''}
-        ${pulse ? 'cta-pulse' : ''}
-        ${className}
-      `}
-      {...props}
-    >
+  const combinedClasses = `
+    ${base} ${variants[variant]}
+    ${fullWidth ? 'w-full' : ''}
+    ${pulse ? 'cta-pulse' : ''}
+    ${className}
+  `;
+
+  const innerContent = (
+    <>
       <span className="relative z-10 flex items-center justify-center gap-2">
         {children}
       </span>
       <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={combinedClasses}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {innerContent}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      className={combinedClasses}
+      {...props}
+    >
+      {innerContent}
     </button>
   );
 };

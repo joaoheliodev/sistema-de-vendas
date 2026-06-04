@@ -4,8 +4,11 @@ import { getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 export const authOptions: NextAuthOptions = {
+  // @ts-ignore - Evita quebras de build caso o adapter do NextAuth v4 reclame das tipagens do Prisma v7
+  adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
   },

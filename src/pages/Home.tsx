@@ -1,6 +1,5 @@
 
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Zap, Shield, AlertTriangle } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Marquee } from '../components/Marquee';
@@ -63,8 +62,6 @@ const fadeUp = {
 } as const;
 
 export const Home: React.FC = () => {
-  const navigate = useNavigate();
-
   return (
     <Layout>
       <FloatingElements />
@@ -106,7 +103,7 @@ export const Home: React.FC = () => {
               <Button 
                 variant="primary" 
                 pulse
-                onClick={() => window.location.href = import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
+                href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
                 className="text-lg md:text-xl"
               >
                 <Zap size={20} />
@@ -261,7 +258,7 @@ export const Home: React.FC = () => {
             <Button 
               variant="primary" 
               pulse 
-              onClick={() => window.location.href = import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
+              href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
               className="text-xl md:text-2xl px-12 py-5"
             >
               <ChevronRight size={24} />
