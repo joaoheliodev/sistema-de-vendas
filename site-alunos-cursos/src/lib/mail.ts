@@ -72,3 +72,45 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     throw new Error(`Failed to send email: ${error.message}`);
   }
 }
+
+export async function sendSetupPasswordEmail(email: string, token: string) {
+  const setupLink = `${process.env.NEXT_PUBLIC_APP_URL || 'https://site-alunos-cursos.vercel.app'}/setup-password?token=${token}`;
+
+  const { data, error } = await resend.emails.send({
+    from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+    to: email,
+    subject: 'Defina sua senha do CyberSeg! 🚀 Seu acesso está liberado',
+    html: `
+      <div style="font-family: 'Inter', Arial, sans-serif; background-color: #050505; color: #FFFFFF; padding: 40px; border: 2px solid #1A1A1A; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #CCFF00; text-transform: uppercase; font-size: 28px; font-weight: 800; letter-spacing: 2px;">BEM-VINDO AO CYBERSEG</h1>
+        
+        <p style="font-size: 16px; line-height: 1.6; color: #E5E7EB; margin-bottom: 24px;">
+          Olá, futuro(a) especialista!<br/><br/>
+          Muito obrigado por confiar no nosso método. O seu pagamento foi aprovado com sucesso e o seu acesso ao <strong>Guia Completo de Cibersegurança</strong> está liberado!
+        </p>
+
+        <p style="font-size: 14px; color: #CCFF00; background-color: rgba(204, 255, 0, 0.05); padding: 12px; border: 1px solid rgba(204, 255, 0, 0.2); border-radius: 4px; margin-bottom: 24px;">
+          👉 Para começar, você precisa configurar a sua senha de acesso clicando no botão abaixo:
+        </p>
+ 
+        <div style="text-align: center; margin: 40px 0;">
+          <a href="${setupLink}" style="display: inline-block; background-color: #CCFF00; color: #000000; font-family: 'Courier New', Courier, monospace; padding: 16px 32px; text-decoration: none; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; border: 4px solid #000000; box-shadow: 6px 6px 0px 0px #000000;">
+            Definir minha senha
+          </a>
+        </div>
+ 
+        <p style="margin-top: 40px; font-size: 12px; color: #6B7280; text-align: center; border-top: 1px solid #1A1A1A; padding-top: 20px;">
+          Se o botão não funcionar, copie e cole o link abaixo no seu navegador:<br/>
+          <a href="${setupLink}" style="color: #CCFF00; text-decoration: underline;">${setupLink}</a><br/><br/>
+          Em caso de dúvidas, responda a este e-mail.
+        </p>
+      </div>
+    `
+  });
+
+  if (error) {
+    console.error('Resend sendSetupPasswordEmail Error:', error);
+    throw new Error(`Failed to send email: ${error.message}`);
+  }
+}
+

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { sendSetupPasswordEmail } from '@/lib/mail';
 
 const DEFAULT_COURSE_TITLE = "Guia Completo de Cibersegurança";
 
@@ -88,6 +89,19 @@ export async function POST(req: Request) {
           kiwifyOrderId: payload.order_id
         }
       });
+
+      // 2.5. CRIAR TOKEN DE DEFINIÇÃO DE SENHA NO PRISMA
+      const token = crypto.randomBytes(32).toString('hex');
+      await prisma.verificationToken.create({
+        data: {
+          email,
+          token,
+          expires: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 horas
+        }
+      });
+
+      // ENVIAR E-MAIL DE DEFINIÇÃO DE SENHA VIA RESEND
+      await sendSetupPasswordEmail(email, token);
 
       // 3. DISPARO DO CONVITE (SUPABASE AUTH ADMIN)
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
