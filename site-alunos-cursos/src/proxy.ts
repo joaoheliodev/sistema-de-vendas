@@ -9,8 +9,13 @@ export default async function proxy(req: NextRequest) {
   const url = req.nextUrl.pathname;
 
   // Protect /dashboard
-  if (url.startsWith("/dashboard") && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (url.startsWith("/dashboard")) {
+    if (!isLoggedIn) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+    if (userRole === "ADMIN") {
+      return NextResponse.redirect(new URL("/admin", req.url));
+    }
   }
 
   // Protect /admin

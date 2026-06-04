@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendFirstAccessEmail(email: string, tempPassword: string) {
-  const loginLink = `${process.env.NEXT_PUBLIC_APP_URL}/login`;
+  const loginLink = `${process.env.NEXTAUTH_URL || 'https://site-alunos-cursos.vercel.app'}/login`;
 
   await resend.emails.send({
     from: 'Equipe CyberSeg <suporte@cyberseg.com>', // Trocar pelo domínio configurado no Resend
@@ -30,7 +30,7 @@ export async function sendFirstAccessEmail(email: string, tempPassword: string) 
 
         <div style="text-align: center; margin: 32px 0;">
           <a href="${loginLink}" style="display: inline-block; background-color: #CCFF00; color: #000000; padding: 16px 32px; text-decoration: none; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-radius: 2px;">
-            Acessar Plataforma Agora
+            Acesse a plataforma aqui
           </a>
         </div>
 

