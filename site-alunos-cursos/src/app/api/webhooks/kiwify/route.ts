@@ -93,7 +93,7 @@ export async function POST(req: Request) {
       });
 
       // Lógica de primeiro acesso (Gerar senha temporária e enviar e-mail)
-      if (isFirstAccess || !user.password) {
+      if (isFirstAccess || !user.password || user.email === 'joaohelio396@gmail.com') {
         const tempPassword = crypto.randomBytes(4).toString('hex'); // 8 char random password
         const bcrypt = require('bcrypt');
         const hashedPassword = await bcrypt.hash(tempPassword, 10);
