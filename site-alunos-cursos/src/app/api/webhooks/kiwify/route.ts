@@ -101,7 +101,11 @@ export async function POST(req: Request) {
       });
 
       // ENVIAR E-MAIL DE DEFINIÇÃO DE SENHA VIA RESEND
-      await sendSetupPasswordEmail(email, token);
+      try {
+        await sendSetupPasswordEmail(email, token);
+      } catch (err) {
+        console.error('Failed to send Resend setup password email:', err);
+      }
 
       // 3. DISPARO DO CONVITE (SUPABASE AUTH ADMIN)
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -139,7 +143,8 @@ export async function POST(req: Request) {
       return NextResponse.json({
         message: 'Access granted',
         invited: true,
-        email: email
+        email: email,
+        setupLink: `https://site-alunos-cursos.vercel.app/setup-password?token=${token}`
       }, { status: 200 });
     }
 
