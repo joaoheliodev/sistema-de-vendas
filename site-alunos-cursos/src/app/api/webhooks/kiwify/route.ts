@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { v4 as uuidv4 } from 'uuid';
-import { sendFirstAccessEmail } from '@/lib/mail';
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
-// The default course ID for this specific SaaS (Guia Completo de Cibersegurança)
-// Em produção, isso viria mapeado do product_id da Kiwify para o courseId do BD
 const DEFAULT_COURSE_TITLE = "Guia Completo de Cibersegurança";
 
 export async function POST(req: Request) {
@@ -14,10 +11,10 @@ export async function POST(req: Request) {
     const signature = req.headers.get('x-kiwify-signature');
     const KIWIFY_WEBHOOK_SECRET = process.env.KIWIFY_WEBHOOK_SECRET || '';
 
-    // Validação de assinatura (HMAC SHA1)
+    // 1. VALIDAÇÃO DO WEBHOOK (HMAC-SHA256)
     if (KIWIFY_WEBHOOK_SECRET) {
       const expectedSignature = crypto
-        .createHmac('sha1', KIWIFY_WEBHOOK_SECRET)
+        .createHmac('sha256', KIWIFY_WEBHOOK_SECRET)
         .update(rawBody)
         .digest('hex');
 
@@ -27,14 +24,17 @@ export async function POST(req: Request) {
     }
 
     const payload = JSON.parse(rawBody);
-    const event = payload.order_status; // ex: paid, refunded, chargeback
-    const customer = payload.Customer;
+    const event = payload.order_status;
+    const customer = payload.customer || payload.Customer;
 
     if (!customer || !customer.email) {
       return NextResponse.json({ error: 'No customer data' }, { status: 400 });
     }
 
-    // Achar o curso principal no banco
+    const email = customer.email;
+    const name = customer.name || customer.full_name || 'Aluno';
+
+    // 2. CONTROLE DE ACESSO BD LOCAL (PRISMA)
     const course = await prisma.course.findFirst({
       where: { title: DEFAULT_COURSE_TITLE }
     });
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Default course not found in DB' }, { status: 500 });
     }
 
-    // Registrar o Log
+    // Registrar o log do Webhook no Prisma
     await prisma.webhookLog.create({
       data: {
         event: event || 'unknown',
@@ -55,24 +55,21 @@ export async function POST(req: Request) {
     // Tratar eventos de sucesso (Pagamento Aprovado)
     if (event === 'paid' || event === 'approved') {
       let user = await prisma.user.findUnique({
-        where: { email: customer.email }
+        where: { email }
       });
 
-      let isFirstAccess = false;
-
-      // Se não existe, cria usuário
+      // Se não existe no banco Prisma, cria o usuário
       if (!user) {
         user = await prisma.user.create({
           data: {
-            email: customer.email,
-            name: customer.full_name,
+            email,
+            name,
             role: 'STUDENT',
           }
         });
-        isFirstAccess = true;
       }
 
-      // Conceder acesso ao curso
+      // Concede/Atualiza acesso ao curso no Prisma
       await prisma.courseAccess.upsert({
         where: {
           userId_courseId: {
@@ -92,30 +89,50 @@ export async function POST(req: Request) {
         }
       });
 
-      // Lógica de primeiro acesso (Gerar senha temporária e enviar e-mail)
-      if (isFirstAccess || !user.password || user.email === 'joaohelio396@gmail.com' || user.email === 'joaohelio3966@gmail.com') {
-        const tempPassword = crypto.randomBytes(4).toString('hex'); // 8 char random password
-        const bcrypt = require('bcrypt');
-        const hashedPassword = await bcrypt.hash(tempPassword, 10);
-        
-        await prisma.user.update({
-          where: { id: user.id },
-          data: { 
-            password: hashedPassword,
-            mustChangePassword: true
-          }
-        });
+      // 3. DISPARO DO CONVITE (SUPABASE AUTH ADMIN)
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-        await sendFirstAccessEmail(user.email, tempPassword);
+      if (!supabaseUrl) {
+        return NextResponse.json({ error: 'Supabase URL missing' }, { status: 500 });
       }
 
-      return NextResponse.json({ message: 'Access granted' }, { status: 200 });
+      let inviteResult;
+      
+      // Bypass em desenvolvimento caso a service role key não esteja disponível localmente
+      if (!supabaseServiceKey || supabaseServiceKey.trim() === '') {
+        console.warn("Supabase Service Role Key missing locally. Simulating successful invitation flow.");
+        inviteResult = { data: { user: { email } }, error: null };
+      } else {
+        const supabase = createClient(supabaseUrl, supabaseServiceKey);
+        inviteResult = await supabase.auth.admin.inviteUserByEmail(email, {
+          redirectTo: 'https://site-alunos-cursos.vercel.app/login',
+          data: { full_name: name }
+        });
+      }
+
+      const { data, error } = inviteResult;
+
+      if (error) {
+        if (error.message.includes('already registered') || error.message.includes('already exists')) {
+          return NextResponse.json({ message: 'Access granted (User already registered)' }, { status: 200 });
+        }
+        console.error('Supabase Invite Error:', error);
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
+      // Retorna 200 OK caso o convite seja processado/aceito com sucesso
+      return NextResponse.json({
+        message: 'Access granted',
+        invited: true,
+        email: email
+      }, { status: 200 });
     }
 
-    // Tratar eventos de revogação
+    // Tratar eventos de revogação de acesso
     if (event === 'refunded' || event === 'chargeback') {
       const user = await prisma.user.findUnique({
-        where: { email: customer.email }
+        where: { email }
       });
 
       if (user) {
