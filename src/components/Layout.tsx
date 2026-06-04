@@ -63,12 +63,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 )}
               </React.Fragment>
             ))}
-            <Link 
-              to="/checkout"
+            <a 
+              href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
               className="ml-4 border border-neon text-neon font-oswald uppercase italic text-xs tracking-wider px-4 py-2 hover:bg-neon hover:text-dark transition-all duration-300"
             >
-              R$ 34,67 → ACESSAR
-            </Link>
+              R$ 67,50 → ACESSAR
+            </a>
           </nav>
 
           {/* Mobile Menu Toggle */}
@@ -130,13 +130,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 transition={{ delay: 0.4 }}
                 className="mt-8"
               >
-                <Link
-                  to="/checkout"
+                <a
+                  href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
                   onClick={() => setIsMenuOpen(false)}
                   className="border-2 border-neon bg-neon text-dark font-oswald uppercase italic text-xl px-10 py-4 font-bold tracking-wider"
                 >
-                  ACESSAR POR R$ 34,67
-                </Link>
+                  ACESSAR POR R$ 67,50
+                </a>
               </motion.div>
             </nav>
           </motion.div>

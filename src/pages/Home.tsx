@@ -106,11 +106,11 @@ export const Home: React.FC = () => {
               <Button 
                 variant="primary" 
                 pulse
-                onClick={() => navigate('/checkout')}
+                onClick={() => window.location.href = import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
                 className="text-lg md:text-xl"
               >
                 <Zap size={20} />
-                BYPASS O SISTEMA — R$ 34,67
+                BYPASS O SISTEMA — R$ 67,50
               </Button>
             </div>
 
@@ -226,7 +226,7 @@ export const Home: React.FC = () => {
           <AlertTriangle size={24} className="text-neon shrink-0" />
           <p className="font-oswald uppercase italic text-lg md:text-xl font-bold tracking-wide">
             <span className="text-neon">ZERO-DAY ALERT:</span> Este material não será gratuito para sempre. 
-            O preço de <span className="text-neon">R$ 34,67</span> é temporário.
+            O preço de <span className="text-neon">R$ 67,50</span> é temporário.
           </p>
         </div>
       </motion.section>
@@ -254,14 +254,14 @@ export const Home: React.FC = () => {
             </p>
             
             <div className="font-oswald text-6xl md:text-8xl text-neon font-black italic mb-2 neon-text-glow">
-              R$ 34,67
+              R$ 67,50
             </div>
             <p className="font-mono text-xs text-gray-600 mb-10">PAGAMENTO ÚNICO // SEM ASSINATURA // SEM TAXA OCULTA</p>
 
             <Button 
               variant="primary" 
               pulse 
-              onClick={() => navigate('/checkout')}
+              onClick={() => window.location.href = import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
               className="text-xl md:text-2xl px-12 py-5"
             >
               <ChevronRight size={24} />

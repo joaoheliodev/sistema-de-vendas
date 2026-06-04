@@ -277,7 +277,7 @@ export const Checkout: React.FC = () => {
                   <div>
                     <span className="font-mono text-xs text-gray-600 block mb-1">VALOR_TOTAL:</span>
                     <span className="font-oswald text-5xl md:text-7xl text-neon font-black italic neon-text-glow">
-                      R$ 34,67
+                      R$ 67,50
                     </span>
                   </div>
                   <div className="text-right">
