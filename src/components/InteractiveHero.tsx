@@ -28,30 +28,31 @@ export const InteractiveHero: React.FC = () => {
   const [isSecure, setIsSecure] = useState(false);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <section className="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Section header */}
-        <div className="mb-10">
-          <div className="flex items-center gap-4 mb-4">
+        {/* Cabeçalho da seção */}
+        <div className="mb-12">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="font-mono text-neon/40 text-sm">[01]</span>
             <div className="w-12 h-px bg-neon" />
-            <span className="font-mono text-neon text-xs tracking-[0.3em]">INTERACTIVE_DEMO</span>
+            <span className="section-kicker">INTERACTIVE_DEMO</span>
           </div>
-          <h2 className="font-oswald text-3xl md:text-5xl uppercase italic font-black tracking-tight mb-3">
+          <h2 className="editorial-heading mb-4">
             ANTES <span className="text-gray-500">&</span> DEPOIS<span className="text-neon">_</span>
           </h2>
-          <p className="text-gray-500 font-mono text-sm max-w-xl">
+          <p className="text-gray-500 font-mono text-sm md:text-base max-w-xl leading-relaxed">
             Passe o mouse sobre o painel para ver a diferença entre um sistema vulnerável e um sistema protegido pelo conhecimento do guia.
           </p>
         </div>
 
-        {/* Interactive container */}
+        {/* Container interativo */}
         <div
-          className="relative border border-grid bg-black overflow-hidden cursor-crosshair group"
+          className="relative border border-grid bg-black/90 overflow-hidden cursor-crosshair group"
           onMouseEnter={() => setIsSecure(true)}
           onMouseLeave={() => setIsSecure(false)}
           onTouchStart={() => setIsSecure(true)}

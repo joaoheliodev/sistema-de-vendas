@@ -25,7 +25,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className="scanline-overlay" />
 
       {/* Header */}
-      <header className="border-b border-grid/60 py-4 px-4 md:px-8 relative z-50 bg-dark/90 backdrop-blur-md">
+      <header className="border-b border-grid/60 py-4 px-5 md:px-8 sticky top-0 z-50 glass">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link 
             to="/" 

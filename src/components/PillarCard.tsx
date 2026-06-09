@@ -95,10 +95,20 @@ export const PillarCard: React.FC<PillarCardProps> = ({ moduleNumber, title, des
         }}
       >
         <div className={`
-          border bg-dark-surface p-6 relative overflow-hidden
+          border glass p-7 relative overflow-hidden
           transition-all duration-300
           ${isHovered ? 'border-neon neon-glow' : 'border-grid'}
         `}>
+          {/* Número do módulo como marca d'água editorial */}
+          <span
+            className={`absolute -top-4 -right-2 font-oswald italic font-extrabold leading-none select-none pointer-events-none transition-all duration-300 ${
+              isHovered ? 'text-neon/10' : 'text-white/[0.03]'
+            }`}
+            style={{ fontSize: '7rem' }}
+          >
+            {moduleNumber}
+          </span>
+
           {/* Top loading bar */}
           <div className="absolute top-0 left-0 w-full h-0.5 bg-grid">
             <motion.div 

@@ -136,23 +136,26 @@ export const Checkout: React.FC = () => {
   return (
     <Layout>
       <FloatingElements />
+      {/* Brilho ambiente difuso no topo */}
+      <div className="ambient-glow" />
 
-      <div className="max-w-6xl mx-auto px-4 md:px-8 py-12 md:py-20">
-        {/* Page Title */}
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-16 md:py-24">
+        {/* Título da página */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-10"
+          className="mb-14"
         >
-          <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-4 mb-5">
+            <span className="font-mono text-neon/40 text-sm">[00]</span>
             <div className="w-10 h-px bg-neon" />
-            <span className="font-mono text-neon text-xs tracking-[0.3em]">DEEP_SCAN</span>
+            <span className="section-kicker">DEEP_SCAN</span>
           </div>
-          <h1 className="font-oswald text-4xl md:text-6xl uppercase italic font-black tracking-tight">
-            EMENTA COMPLETA<span className="text-neon">_</span>
+          <h1 className="editorial-display" style={{ fontSize: 'clamp(2.75rem, 9vw, 6.5rem)' }}>
+            EMENTA<br />COMPLETA<span className="text-neon">_</span>
           </h1>
-          <p className="text-gray-500 font-mono text-sm mt-3">
+          <p className="text-gray-500 font-mono text-sm md:text-base mt-6 max-w-2xl leading-relaxed">
             Cada linha abaixo é um tópico real do guia. Sem enrolação. Sem conteúdo de preenchimento.
           </p>
         </motion.div>
@@ -207,13 +210,13 @@ export const Checkout: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="border border-grid/60 p-6 md:p-8 bg-dark-surface/50 relative"
+              className="border border-grid/60 p-6 md:p-8 glass relative"
             >
               <div className="absolute top-0 right-0 bg-neon text-dark text-[9px] px-2 py-1 font-mono font-bold tracking-wider">
                 RISK_ZERO
               </div>
               <ShieldCheck size={48} className="text-neon mb-5" strokeWidth={1.5} />
-              <h3 className="font-oswald text-2xl uppercase italic font-bold mb-3">
+              <h3 className="font-oswald text-2xl md:text-3xl uppercase italic font-bold mb-3 tracking-tight">
                 GARANTIA<br />INCONDICIONAL<br />
                 <span className="text-neon">DE 7 DIAS</span>
               </h3>
@@ -230,9 +233,9 @@ export const Checkout: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="border border-grid/60 p-6 bg-dark-surface/50"
+              className="border border-grid/60 p-6 glass"
             >
-              <h4 className="font-mono text-xs text-neon tracking-widest mb-4">O QUE ESTÁ INCLUSO:</h4>
+              <h4 className="font-mono text-xs text-neon tracking-[0.3em] mb-4">O QUE ESTÁ INCLUSO:</h4>
               <ul className="space-y-3">
                 {FEATURES.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-gray-400">
@@ -250,7 +253,7 @@ export const Checkout: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-3 border-2 border-neon/40 bg-dark-surface/80 backdrop-blur-sm p-6 md:p-10 relative flex flex-col justify-between hover:border-neon transition-colors duration-500 group"
+            className="md:col-span-3 border-2 border-neon/40 glass p-6 md:p-10 relative flex flex-col justify-between hover:border-neon transition-colors duration-500 group"
           >
             {/* Corner accents */}
             <div className="absolute top-0 left-0 w-5 h-5 border-b border-r border-neon" />
@@ -264,7 +267,7 @@ export const Checkout: React.FC = () => {
                 <span>CHECKOUT // ENCRYPTED // TLS 1.3</span>
               </div>
 
-              <h3 className="font-oswald text-3xl md:text-4xl uppercase italic font-bold mb-2 tracking-tight">
+              <h3 className="editorial-heading mb-2" style={{ fontSize: 'clamp(1.875rem, 4vw, 2.75rem)' }}>
                 RESUMO DO PEDIDO
               </h3>
               <p className="text-gray-400 mb-8 text-sm">
@@ -311,9 +314,9 @@ export const Checkout: React.FC = () => {
                 block w-full text-center border-2 border-neon bg-neon text-dark
                 font-oswald uppercase italic px-8 py-5 text-xl md:text-2xl font-black
                 transition-all duration-300
-                hover:bg-transparent hover:text-neon hover:shadow-[0_0_40px_#CCFF0066,0_0_80px_#CCFF0033]
+                hover:bg-transparent hover:text-neon hover:shadow-[0_0_32px_#CCFF0055,0_0_72px_#CCFF0033]
                 active:translate-y-0.5
-                cta-pulse relative overflow-hidden tracking-wide
+                cta-pulse btn-sweep relative overflow-hidden tracking-wide
               "
             >
               <span className="relative z-10 flex items-center justify-center gap-3">

@@ -5,8 +5,9 @@
 @theme {
   --color-neon: #CCFF00;
   --color-neon-dim: #99cc00;
-  --color-dark: #0A0A0A;
-  --color-dark-surface: #111111;
+  /* Fundo quase preto, mais profundo, inspirado em landing editorial dark */
+  --color-dark: #050505;
+  --color-dark-surface: #0d0d0d;
   --color-grid: #1F2937;
   --color-grid-bright: #374151;
 
@@ -34,12 +35,66 @@
     color: #ffffff;
     font-family: var(--font-inter);
     overflow-x: hidden;
+    /* Suaviza a renderização da tipografia editorial grande */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   ::selection {
     background: var(--color-neon);
     color: var(--color-dark);
   }
+}
+
+/* =============================================
+   TIPOGRAFIA EDITORIAL (fluida, enorme e ousada)
+   inspirada em landonorris.com — usa clamp() p/ mobile-first
+   ============================================= */
+.editorial-display {
+  font-family: var(--font-oswald);
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+  /* Escala fluida: encolhe no mobile, gigante no desktop */
+  font-size: clamp(3rem, 11vw, 9rem);
+}
+
+.editorial-heading {
+  font-family: var(--font-oswald);
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  font-size: clamp(2.25rem, 6vw, 4.5rem);
+}
+
+.editorial-mega {
+  /* Para os números/palavras gigantes de respiro nas seções */
+  font-family: var(--font-oswald);
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  font-size: clamp(4rem, 18vw, 14rem);
+}
+
+/* Rótulo monoespaçado de seção (kicker editorial) */
+.section-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-neon);
+}
+
+/* Contorno de texto (apenas stroke) — toque editorial sofisticado */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(204, 255, 0, 0.35);
 }
 
 /* =============================================
@@ -146,12 +201,12 @@
   width: 200%;
   height: 200%;
   background-image:
-    linear-gradient(rgba(204, 255, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(204, 255, 0, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  transform: perspective(500px) rotateX(60deg);
+    linear-gradient(rgba(204, 255, 0, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(204, 255, 0, 0.022) 1px, transparent 1px);
+  background-size: 72px 72px;
+  transform: perspective(560px) rotateX(62deg);
   transform-origin: center top;
-  animation: grid-scroll 20s linear infinite;
+  animation: grid-scroll 24s linear infinite;
 }
 
 .cyber-grid-bg::after {
@@ -160,8 +215,26 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50%;
-  background: linear-gradient(to top, #0A0A0A 0%, transparent 100%);
+  height: 60%;
+  background: linear-gradient(to top, var(--color-dark) 0%, transparent 100%);
+}
+
+/* Brilho ambiente difuso no topo — profundidade editorial */
+.ambient-glow {
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70vw;
+  height: 50vh;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(204, 255, 0, 0.06) 0%,
+    transparent 70%
+  );
+  filter: blur(40px);
 }
 
 @keyframes grid-scroll {
@@ -193,15 +266,44 @@
    NEON GLOW UTILITIES
    ============================================= */
 .neon-glow {
-  box-shadow: 0 0 10px #CCFF0044, 0 0 30px #CCFF0022, 0 0 60px #CCFF0011;
+  box-shadow: 0 0 10px #CCFF0033, 0 0 30px #CCFF0018, 0 0 60px #CCFF000d;
 }
 
 .neon-glow-strong {
-  box-shadow: 0 0 15px #CCFF0066, 0 0 40px #CCFF0044, 0 0 80px #CCFF0022;
+  box-shadow: 0 0 15px #CCFF0055, 0 0 40px #CCFF0033, 0 0 80px #CCFF0018;
 }
 
 .neon-text-glow {
-  text-shadow: 0 0 10px #CCFF0066, 0 0 30px #CCFF0033, 0 0 60px #CCFF0011;
+  /* Brilho de texto mais discreto e sofisticado */
+  text-shadow: 0 0 14px #CCFF0055, 0 0 40px #CCFF0022;
+}
+
+/* =============================================
+   GLASSMORPHISM SUTIL
+   ============================================= */
+.glass {
+  background: rgba(13, 13, 13, 0.55);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-neon {
+  background: rgba(204, 255, 0, 0.025);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  border: 1px solid rgba(204, 255, 0, 0.18);
+}
+
+/* Linha divisória com brilho neon ao centro */
+.divider-neon {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(204, 255, 0, 0.4),
+    transparent
+  );
 }
 
 /* =============================================
@@ -220,12 +322,47 @@
    PULSING CTA BUTTON
    ============================================= */
 @keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 0 15px #CCFF0044, 0 0 30px #CCFF0022; }
-  50% { box-shadow: 0 0 30px #CCFF0088, 0 0 60px #CCFF0044, 0 0 100px #CCFF0022; }
+  0%, 100% { box-shadow: 0 0 12px #CCFF0033, 0 0 28px #CCFF0018; }
+  50% { box-shadow: 0 0 24px #CCFF0066, 0 0 56px #CCFF0033, 0 0 90px #CCFF0018; }
 }
 
 .cta-pulse {
-  animation: cta-pulse 2s ease-in-out infinite;
+  animation: cta-pulse 2.6s ease-in-out infinite;
+}
+
+/* Varredura de brilho que cruza o botão (transform-only, 60fps) */
+@keyframes btn-sweep {
+  0% { transform: translateX(-130%) skewX(-20deg); }
+  100% { transform: translateX(230%) skewX(-20deg); }
+}
+
+.btn-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: translateX(-130%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.btn-sweep:hover::after {
+  animation: btn-sweep 0.9s ease forwards;
+}
+
+/* =============================================
+   SCROLL REVEAL (fallback CSS, caso framer falte)
+   ============================================= */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* =============================================
@@ -255,7 +392,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0A;
+  background: var(--color-dark);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -265,4 +402,18 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #CCFF00;
+}
+
+/* =============================================
+   ACESSIBILIDADE — respeita prefers-reduced-motion
+   ============================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

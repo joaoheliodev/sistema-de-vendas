@@ -65,43 +65,46 @@ export const Home: React.FC = () => {
   return (
     <Layout>
       <FloatingElements />
+      {/* Brilho ambiente difuso no topo da página */}
+      <div className="ambient-glow" />
 
       <section className="relative w-full overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-36 flex flex-col md:flex-row items-center gap-8 md:gap-16">
-          {/* Left - Copy */}
-          <motion.div 
-            className="flex-1 text-center md:text-left z-10"
+        <div className="max-w-7xl mx-auto px-5 md:px-8 pt-24 pb-20 md:pt-40 md:pb-36 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+          {/* Esquerda — Copy editorial */}
+          <motion.div
+            className="flex-1 text-center lg:text-left z-10"
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Status badge */}
+            {/* Badge de status */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="inline-flex items-center gap-2 border border-neon/30 bg-neon/5 px-4 py-1.5 mb-8 font-mono text-xs text-neon tracking-widest"
+              className="inline-flex items-center gap-2 glass-neon px-4 py-1.5 mb-10 font-mono text-[11px] text-neon tracking-[0.25em]"
             >
               <span className="w-1.5 h-1.5 bg-neon animate-pulse" />
               THREAT_LEVEL: MÁXIMO — VAGAS LIMITADAS
             </motion.div>
 
-            <h1 className="font-oswald text-[2.75rem] leading-[0.9] md:text-7xl lg:text-8xl xl:text-[6.5rem] uppercase italic font-black tracking-tighter mb-6">
+            {/* Título editorial gigante */}
+            <h1 className="editorial-display mb-8">
               <GlitchText text="DOMINE O" className="block text-white" as="span" />
               <span className="block text-neon neon-text-glow my-1 md:my-2">SUBMUNDO</span>
               <span className="block text-white">DA SEGURANÇA</span>
               <span className="block text-white">DIGITAL<span className="text-neon">_</span></span>
             </h1>
 
-            <p className="text-gray-400 text-base md:text-lg mb-8 max-w-xl mx-auto md:mx-0 leading-relaxed">
-              O guia que transforma iniciantes em operadores. <span className="text-white font-semibold">6 pilares</span>, do 
-              TCP/IP handshake até a infraestrutura AWS. Pare de assistir tutoriais — execute como um 
+            <p className="text-gray-400 text-base md:text-xl mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              O guia que transforma iniciantes em operadores. <span className="text-white font-semibold">6 pilares</span>, do
+              TCP/IP handshake até a infraestrutura AWS. Pare de assistir tutoriais — execute como um
               <span className="text-neon font-semibold"> pentester</span>.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button 
-                variant="primary" 
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Button
+                variant="primary"
                 pulse
                 href={import.meta.env.VITE_KIWIFY_CHECKOUT_URL || '#'}
                 className="text-lg md:text-xl"
@@ -111,9 +114,9 @@ export const Home: React.FC = () => {
               </Button>
             </div>
 
-            {/* Social proof line */}
-            <motion.p 
-              className="mt-6 font-mono text-[11px] text-gray-600 tracking-wider"
+            {/* Prova social */}
+            <motion.p
+              className="mt-8 font-mono text-[11px] text-gray-600 tracking-wider"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
@@ -122,14 +125,14 @@ export const Home: React.FC = () => {
             </motion.p>
           </motion.div>
 
-          {/* Right - Visual Code Block (Desktop Only) */}
-          <motion.div 
+          {/* Direita — Bloco de código (somente desktop) */}
+          <motion.div
             className="hidden lg:flex flex-1 justify-end select-none pointer-events-none"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            <div className="border border-grid/60 bg-dark-surface/80 backdrop-blur-sm p-6 w-full max-w-md font-mono text-sm relative">
+            <div className="glass p-6 w-full max-w-md font-mono text-sm relative neon-glow">
               {/* Window chrome */}
               <div className="flex items-center gap-2 mb-4 pb-3 border-b border-grid/40">
                 <div className="w-2.5 h-2.5 bg-red-500/80" />
@@ -167,15 +170,17 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      <motion.section 
+      <motion.section
         {...fadeUp}
-        className="border-y border-grid/40 bg-dark-surface/50 backdrop-blur-sm"
+        className="border-y border-grid/40 glass"
       >
         <div className="max-w-7xl mx-auto grid grid-cols-3 divide-x divide-grid/30">
           {STATS.map((stat) => (
-            <div key={stat.label} className="py-6 md:py-8 text-center">
-              <div className="font-oswald text-3xl md:text-5xl font-bold text-neon italic">{stat.value}</div>
-              <div className="font-mono text-[10px] md:text-xs text-gray-500 tracking-widest mt-1">{stat.label}</div>
+            <div key={stat.label} className="py-8 md:py-12 text-center group">
+              <div className="font-oswald text-4xl md:text-7xl font-extrabold text-neon italic tracking-tight leading-none transition-transform duration-300 group-hover:scale-105">
+                {stat.value}
+              </div>
+              <div className="font-mono text-[10px] md:text-xs text-gray-500 tracking-[0.3em] mt-2">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -185,23 +190,24 @@ export const Home: React.FC = () => {
 
       <InteractiveHero />
 
-      <section className="max-w-7xl mx-auto px-4 md:px-8 py-20 md:py-32">
-        <motion.div {...fadeUp} className="mb-16">
-          <div className="flex items-center gap-4 mb-4">
+      <section className="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-40">
+        <motion.div {...fadeUp} className="mb-16 md:mb-24">
+          <div className="flex items-center gap-4 mb-6">
+            <span className="font-mono text-neon/40 text-sm">[02]</span>
             <div className="w-12 h-px bg-neon" />
-            <span className="font-mono text-neon text-xs tracking-[0.3em]">ARCHITECTURE</span>
+            <span className="section-kicker">ARCHITECTURE</span>
           </div>
-          <h2 className="font-oswald text-4xl md:text-6xl uppercase italic font-black tracking-tight">
+          <h2 className="editorial-heading">
             OS 6 PILARES<span className="text-neon">_</span>
           </h2>
-          <p className="text-gray-500 font-mono text-sm mt-4 max-w-2xl">
-            Cada módulo foi projetado como um vetor de ataque ao seu desconhecimento. 
-            Sem enrolação. Sem teoria vazia. Apenas as habilidades que separam 
+          <p className="text-gray-500 font-mono text-sm md:text-base mt-6 max-w-2xl leading-relaxed">
+            Cada módulo foi projetado como um vetor de ataque ao seu desconhecimento.
+            Sem enrolação. Sem teoria vazia. Apenas as habilidades que separam
             <span className="text-white"> script kiddies</span> de <span className="text-neon">operadores reais</span>.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {PILLARS.map((pillar, i) => (
             <PillarCard 
               key={pillar.num}
@@ -215,23 +221,23 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      <motion.section 
+      <motion.section
         {...fadeUp}
-        className="bg-neon/5 border-y border-neon/20 py-6 px-4"
+        className="glass-neon border-y border-neon/20 py-7 px-5"
       >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-center md:text-left">
           <AlertTriangle size={24} className="text-neon shrink-0" />
-          <p className="font-oswald uppercase italic text-lg md:text-xl font-bold tracking-wide">
-            <span className="text-neon">ZERO-DAY ALERT:</span> Este material não será gratuito para sempre. 
+          <p className="font-oswald uppercase italic text-lg md:text-2xl font-bold tracking-wide">
+            <span className="text-neon">ZERO-DAY ALERT:</span> Este material não será gratuito para sempre.
             O preço de <span className="text-neon">R$ 67,50</span> é temporário.
           </p>
         </div>
       </motion.section>
 
-      <section className="py-20 md:py-32 px-4 md:px-8">
+      <section className="py-24 md:py-40 px-5 md:px-8">
         <motion.div
           {...fadeUp}
-          className="max-w-4xl mx-auto border-2 border-neon/60 bg-dark-surface/80 backdrop-blur-sm p-8 md:p-16 relative text-center group hover:border-neon transition-all duration-500"
+          className="max-w-4xl mx-auto border-2 border-neon/50 glass p-8 md:p-20 relative text-center group hover:border-neon transition-all duration-500"
         >
           {/* Corner accents */}
           <div className="absolute top-0 left-0 w-6 h-6 border-b-2 border-r-2 border-neon" />
@@ -243,17 +249,17 @@ export const Home: React.FC = () => {
           
           <div className="relative z-10">
             <Shield size={40} className="text-neon mx-auto mb-6" />
-            <h2 className="font-oswald text-3xl md:text-5xl lg:text-6xl uppercase italic font-black mb-2 tracking-tight">
+            <h2 className="editorial-heading mb-3">
               ACESSO IMEDIATO
             </h2>
-            <p className="font-mono text-gray-500 text-sm mb-8">
+            <p className="font-mono text-gray-500 text-sm mb-10 tracking-wide">
               DOWNLOAD INSTANTÂNEO // ATUALIZAÇÕES VITALÍCIAS // GARANTIA 7 DIAS
             </p>
-            
-            <div className="font-oswald text-6xl md:text-8xl text-neon font-black italic mb-2 neon-text-glow">
+
+            <div className="editorial-mega text-neon mb-3 neon-text-glow" style={{ fontSize: 'clamp(3.5rem, 13vw, 8rem)' }}>
               R$ 67,50
             </div>
-            <p className="font-mono text-xs text-gray-600 mb-10">PAGAMENTO ÚNICO // SEM ASSINATURA // SEM TAXA OCULTA</p>
+            <p className="font-mono text-xs text-gray-600 mb-12 tracking-wide">PAGAMENTO ÚNICO // SEM ASSINATURA // SEM TAXA OCULTA</p>
 
             <Button 
               variant="primary" 

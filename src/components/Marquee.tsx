@@ -9,26 +9,31 @@ export const Marquee: React.FC = () => {
     'ZERO-DAY', 'FIREWALL', 'ENDPOINTS', 'BYPASS', 'HANDSHAKE',
   ];
 
+  // Alterna entre texto preenchido e contorno (ritmo editorial)
   const marqueeContent = items.map((item, i) => (
-    <span key={i} className="mx-4 md:mx-8 inline-flex items-center gap-4 md:gap-8">
-      <span className="text-neon font-oswald uppercase italic text-lg md:text-2xl font-bold tracking-widest whitespace-nowrap">
+    <span key={i} className="mx-4 md:mx-7 inline-flex items-center gap-4 md:gap-7">
+      <span
+        className={`font-oswald uppercase italic text-2xl md:text-4xl font-extrabold tracking-tight whitespace-nowrap ${
+          i % 2 === 0 ? 'text-neon' : 'text-outline'
+        }`}
+      >
         {item}
       </span>
-      <span className="text-grid text-xl font-bold">{'//'}</span>
+      <span className="text-neon/30 text-lg md:text-xl font-bold">{'//'}</span>
     </span>
   ));
 
   return (
-    <div className="w-full overflow-hidden bg-black/80 backdrop-blur-sm border-y border-neon/40 py-3 md:py-4 relative">
-      {/* Neon gradient edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-dark to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-dark to-transparent z-10 pointer-events-none" />
-      
+    <div className="w-full overflow-hidden glass border-y border-neon/40 py-4 md:py-6 relative">
+      {/* Bordas com fade neon */}
+      <div className="absolute left-0 top-0 bottom-0 w-16 md:w-40 bg-gradient-to-r from-dark to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 md:w-40 bg-gradient-to-l from-dark to-transparent z-10 pointer-events-none" />
+
       <div className="flex">
         <motion.div
-          className="flex shrink-0"
+          className="flex shrink-0 will-change-transform"
           animate={{ x: ['0%', '-50%'] }}
-          transition={{ repeat: Infinity, ease: 'linear', duration: 30 }}
+          transition={{ repeat: Infinity, ease: 'linear', duration: 34 }}
         >
           {marqueeContent}
           {marqueeContent}
